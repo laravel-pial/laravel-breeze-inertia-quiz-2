@@ -16,9 +16,9 @@ class UserExamQuiz extends Model
     ];
 
     /**
-     * Returns the ExamUser modal this quiz belongs to
+     * Returns the UserExam modal this quiz belongs to
      */
     public function userExam() {
-        return $this->belongsTo(ExamUser::class, 'user_exam_id', 'id');
+        return $this->belongsTo(UserExam::class, 'user_exam_id', 'id');
     }
 }
