@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\UserExamController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,3 +32,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+// ================== EXAM Routes
+
+    
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resources([
+        'exams' => ExamController::class,
+        'quizes' => QuizController::class,
+    ]);
+});
+
+// Exam Custom Routes
+Route::get('/exams/{id}/quizes/create', [ExamController::class, 'addQuiz']);
+
+// User exam routes
+Route::post('/exams/{id}/attend', [UserExamController::class, 'attend' ]);
+Route::post('/exams/{examId}/quizes/{quizId}', [UserExamController::class, 'nextQuiz' ]);
+Route::post('/exams/{id}/submit', [UserExamController::class, 'submit']);
