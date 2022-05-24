@@ -49,4 +49,4 @@ Route::get('/exams/{id}/quizes/create', [ExamController::class, 'addQuiz']);
 // User exam routes
 Route::post('/exams/{id}/attend', [UserExamController::class, 'attend' ]);
 Route::post('/exams/{examId}/quizes/{quizId}', [UserExamController::class, 'nextQuiz' ]);
-Route::post('/exams/{id}/submit', [UserExamController::class, 'submit']);
+// Route::post('/exams/{id}/submit', [UserExamController::class, 'submit'])->name('userExam.result');

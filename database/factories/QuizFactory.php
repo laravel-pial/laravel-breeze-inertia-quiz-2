@@ -22,7 +22,7 @@ class QuizFactory extends Factory
             'option_a' => 'dhaka',
             'option_b' => 'delhi',
             'option_c' => 'beijing',
-            'answere' => 'dhaka',
+            'answere' => 'option_a',
             'exam_id' => '1'
         ];
     }

@@ -18,7 +18,7 @@ class UserExam extends Model
     /**
      * Returns All the quizes this started exam has with users answere
      */
-    public function quizes() {
+    public function answeredQuizes() {
         return $this->hasMany(UserExamQuiz::class, 'user_exam_id', 'id');
     }
 }

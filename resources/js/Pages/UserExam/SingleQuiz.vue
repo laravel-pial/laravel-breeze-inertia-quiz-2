@@ -58,7 +58,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 
 const props = defineProps([
     'started_at',
@@ -72,6 +72,7 @@ const form = useForm({
 });
 
 const submit = () => {
+    // alert(props.quiz.id);
     form.post(`/exams/${ props.exam.id }/quizes/${ props.quiz.id }`);
 };
 
@@ -111,6 +112,9 @@ const countDownFn = () => {
     countDown.value.seconds = Math.floor((remainingTime%minute)/second);
 }
 
+watchEffect( () => {
+    console.log('quiz: ', props.quiz);
+});
 
 onMounted(() => {
     interval = setInterval(countDownFn, 1000);

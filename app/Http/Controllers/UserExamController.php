@@ -7,13 +7,16 @@ use App\Models\UserExam;
 use App\Models\UserExamQuiz;
 use App\Models\Quiz;
 use App\Models\User;
+use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserExamController extends Controller
 {
-    //
+    /**
+     * User attends the exam
+     */
     public function attend($examId) {
 
         $userExam = null;
@@ -26,11 +29,17 @@ class UserExamController extends Controller
         }
 
         $userExam = UserExam::where(['exam_id' => $examId, 'user_id' => Auth::user()->id])->first();
+        $exam = Exam::find($examId);
+
+        // If all the question already answered return result page
+        if( $exam->quizes->count() == $userExam->answeredQuizes()->count() ) {
+            return $this->getResultPage( $userExam, $exam );
+        }
 
         return Inertia::render('UserExam/SingleQuiz', [
             'started_at' => $userExam->started_at,
-            'exam' => Exam::find($examId),
-            'quiz' => Quiz::all()->where('exam_id', $examId)->first()
+            'exam' => $exam,
+            'quiz' => $this->getNextQuiz( $userExam, $exam )
         ]);
     }
 
@@ -40,44 +49,36 @@ class UserExamController extends Controller
     public function nextQuiz(Request $request, $examId, $quizId ) {
 
         $exam = Exam::find($examId);
+        
+        // Get attended exam info
         $userExam = UserExam::where(['exam_id' => $examId, 'user_id' => Auth::user()->id])->first();
-        $userExamId = $userExam->id;
+
+        // If time exceeds discard currently answered quiz and show result
+        // $now = Carbon::now();
+        // $start_time = Carbon::parse($userExam->started_at);
+        // if( $now->greaterThan($start_time) ) {
+        //     dd([
+        //         'carbon_now' => $now,
+        //         'started_at' => $start_time,
+        //         'err' => 'time passed'
+        //     ]);
+        // }
+
+        // Get submitted quiz info
         $quiz = Quiz::find( $quizId );
         $userAnswere = $quiz->type == 'mcq' ? $request->checked_value : $request->answere;
 
-        UserExamQuiz::create([
-            'user_exam_id' => $userExamId,
-            'quiz_id' => $quizId,
-            'user_answere' => $userAnswere
-        ]);
-
-        // dd([
-        //     'exam_user' => $userExam,
-        //     'quizes' => $userExam->quizes,
-        //     'ex_quizes' => Exam::find($examId)->quizes(),
-        //     'quiz_par_exam' => Exam::find($examId)->quizes()->first()->exam->title,
-        // ]);
+        // Add submitted quiz to the answered quiz list
+        if( !UserExamQuiz::where(['user_exam_id' => $userExam->id,'quiz_id' => $quizId])->exists() ) {
+            UserExamQuiz::create([
+                'user_exam_id' => $userExam->id,
+                'quiz_id' => $quizId,
+                'user_answere' => $userAnswere
+            ]);
+        }
 
         // Get next Quiz for this user exam
-        $nextQuiz = null;
-
-        dd([
-            // 'quiz_ids' => $userExam->quizes->map( function( $record ) {
-            //     return $record->id;
-            // })
-            'nex_quiz' => $exam->quizes
-                                ->whereNotIn( 'id', $userExam->quizes->map( function( $record ) {
-                                    return $record->id;
-                                })),
-            'quiz_ids' => [1]
-        ]);
-
-        if( $userExam->quizes->count() > 0 ) {
-            $nextQuiz = $exam->quizes->first();
-        } else {
-            $nextQuiz = $exam->quizes->first();
-        }
-        dd($nextQuiz);
+        $nextQuiz = $this->getNextQuiz($userExam, $exam);
 
         if( $nextQuiz != null ) {
             return Inertia::render('UserExam/SingleQuiz', [
@@ -86,15 +87,55 @@ class UserExamController extends Controller
                 'quiz' => $nextQuiz
             ]);
         } else {
-            return redirect('exams/'.$examId.'/');
+            // return redirect('exams/'.$examId.'/submit');
+            return $this->getResultPage( $userExam, $exam );
         }
     }
 
-    public function submit(Request $request, $examId) {
-        return response()->json([
-            'examId' => $examId,
-            'req_body' => $request->body,
-            'result' => 'result'
+    /**
+     * Get the Next Unanswered Quiz under Current Exam
+     */
+    protected function getNextQuiz( $userExam, $exam ) {
+        if( $exam->quizes->count() > 0 ) {
+            return $exam->quizes
+                            ->whereNotIn('id', $userExam->answeredQuizes->map(function ( $record ) {
+                                return $record->quiz_id;
+                            }))
+                            ->first();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Return result page with appropriate data
+     */
+    protected function getResultPage( $userExam, $exam ) {
+        return Inertia::render('UserExam/Result', [
+            'result' => $this->getCalculatedResult( $userExam, $exam )
         ]);
     }
+
+    /**
+     * Generate Result Object
+     */
+    private function getCalculatedResult( $userExam, $exam ) {
+        $rightCount = $userExam->answeredQuizes
+                                ->reduce( function( $result, $aQuiz ) {
+                                    $quiz = Quiz::find($aQuiz->quiz_id);
+                                    if( $aQuiz->user_answere == $quiz->answere ) {                                        
+                                        return ++$result;
+                                    }
+
+                                    return $result;
+                                }, 0);
+
+        return [
+            'answered' => $userExam->answeredQuizes->count(),
+            'right' => $rightCount,
+            'wrong' => $exam->quizes->count() - $rightCount,
+            'obtained_mark' => 5
+        ];
+    }
+
 }
