@@ -1,18 +1,28 @@
 <template>
     <AuthenticatedLayout>
-        <div class="result-page">
-            <p class="answered">
-                Answered: {{ result.answered }}
-            </p>
-            <p class="right">
-                Right: {{ result.right }}
-            </p>
-            <p class="wrong">
-                Wrong: {{ result.wrong }}
-            </p>
-            <p class="obtained_mark">
-                Obtained Mark: {{ result.obtained_mark }}
-            </p>
+        <div class="result-page w-full h-screen flex flex-col justify-start items-center"
+        >
+            <h2
+                class="w-full flex flex-col justify-start items-center"
+            > 
+                <h2 class="w-full text-center font-mono text-xl" >!Exam Finished</h2>
+                <span>Your obtained mark: {{ result.obtained_mark }}</span>
+            </h2>
+
+            <div class="section-2 w-full flex justify-between">
+                <p class="unanswered bg-yellow-700 text-white text-center flex-grow">
+                    Unanswered: {{ result.unanswered }}
+                </p>
+                <p class="answered bg-blue-700 text-white text-center flex-grow">
+                    Answered: {{ result.answered }}
+                </p>
+                <p class="right bg-green-700 text-white text-center flex-grow">
+                    Right: {{ result.right }}
+                </p>
+                <p class="wrong bg-red-800 text-white text-center flex-grow">
+                    Wrong: {{ result.wrong }}
+                </p>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

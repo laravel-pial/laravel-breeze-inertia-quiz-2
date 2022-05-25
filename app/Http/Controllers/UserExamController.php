@@ -31,6 +31,14 @@ class UserExamController extends Controller
         $userExam = UserExam::where(['exam_id' => $examId, 'user_id' => Auth::user()->id])->first();
         $exam = Exam::find($examId);
 
+        $now = Carbon::now();
+        $end_time = Carbon::parse($userExam->started_at)->addMinute($userExam->duration);
+        
+        // If time up show result page
+        if( $now->greaterThan($end_time)) {
+            return $this->getResultPage( $userExam, $exam );
+        }
+
         // If all the question already answered return result page
         if( $exam->quizes->count() == $userExam->answeredQuizes()->count() ) {
             return $this->getResultPage( $userExam, $exam );
@@ -54,15 +62,13 @@ class UserExamController extends Controller
         $userExam = UserExam::where(['exam_id' => $examId, 'user_id' => Auth::user()->id])->first();
 
         // If time exceeds discard currently answered quiz and show result
-        // $now = Carbon::now();
-        // $start_time = Carbon::parse($userExam->started_at);
-        // if( $now->greaterThan($start_time) ) {
-        //     dd([
-        //         'carbon_now' => $now,
-        //         'started_at' => $start_time,
-        //         'err' => 'time passed'
-        //     ]);
-        // }
+        $now = Carbon::now();
+        $end_time = Carbon::parse($userExam->started_at)->addMinute($userExam->duration);
+        
+        // If time up show result page
+        if( $now->greaterThan($end_time)) {
+            return $this->getResultPage( $userExam, $exam );
+        }
 
         // Get submitted quiz info
         $quiz = Quiz::find( $quizId );
@@ -120,21 +126,43 @@ class UserExamController extends Controller
      * Generate Result Object
      */
     private function getCalculatedResult( $userExam, $exam ) {
-        $rightCount = $userExam->answeredQuizes
-                                ->reduce( function( $result, $aQuiz ) {
-                                    $quiz = Quiz::find($aQuiz->quiz_id);
-                                    if( $aQuiz->user_answere == $quiz->answere ) {                                        
-                                        return ++$result;
-                                    }
 
-                                    return $result;
-                                }, 0);
+        $rightCount = 0;
+        $wrongCount = 0;
+        $unansweredCount = 0;
+        $obtainedMark = 0;
+        // $rightCount = $userExam->answeredQuizes
+        //                         ->reduce( function( $result, $aQuiz ) {
+        //                             $quiz = Quiz::find($aQuiz->quiz_id);
+        //                             if( $aQuiz->user_answere == $quiz->answere ) {                                        
+        //                                 return ++$result;
+        //                             }
+
+        //                             return $result;
+        //                         }, 0);
+
+        foreach( $userExam->answeredQuizes as $answeredQuiz ) {
+            if( $answeredQuiz->user_answere == Quiz::find( $answeredQuiz->quiz_id )->answere ) {
+                $rightCount++;
+            } else {
+                $wrongCount++;
+            }
+        }
+
+        $unansweredCount = $exam->quizes->count() - $userExam->answeredQuizes->count();
+
+        if( $exam->has_negative_marking ) {
+            $obtainedMark = ($rightCount * 2) - ($wrongCount * $exam->negative_mark_rate);
+        } else {
+            $obtainedMark = ($rightCount * 2);
+        }
 
         return [
             'answered' => $userExam->answeredQuizes->count(),
             'right' => $rightCount,
-            'wrong' => $exam->quizes->count() - $rightCount,
-            'obtained_mark' => 5
+            'wrong' => $wrongCount,
+            'unanswered' => $unansweredCount,
+            'obtained_mark' => $obtainedMark < 0 ? 0 : $obtainedMark
         ];
     }
 

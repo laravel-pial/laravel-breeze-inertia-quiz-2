@@ -18,7 +18,7 @@ class ExamFactory extends Factory
     {
         return [
             'title' => 'Exam 1 auto',
-            'duration' => '2',
+            'duration' => '1',
             'mark' => '100',
             'has_negative_marking' => false,
             'negative_mark_rate' => '0.25',
