@@ -131,15 +131,8 @@ class UserExamController extends Controller
         $wrongCount = 0;
         $unansweredCount = 0;
         $obtainedMark = 0;
-        // $rightCount = $userExam->answeredQuizes
-        //                         ->reduce( function( $result, $aQuiz ) {
-        //                             $quiz = Quiz::find($aQuiz->quiz_id);
-        //                             if( $aQuiz->user_answere == $quiz->answere ) {                                        
-        //                                 return ++$result;
-        //                             }
-
-        //                             return $result;
-        //                         }, 0);
+        
+        $markForRightAnswere = ($exam->mark / $exam->no_of_quizes);
 
         foreach( $userExam->answeredQuizes as $answeredQuiz ) {
             if( $answeredQuiz->user_answere == Quiz::find( $answeredQuiz->quiz_id )->answere ) {
@@ -152,9 +145,9 @@ class UserExamController extends Controller
         $unansweredCount = $exam->quizes->count() - $userExam->answeredQuizes->count();
 
         if( $exam->has_negative_marking ) {
-            $obtainedMark = ($rightCount * 2) - ($wrongCount * $exam->negative_mark_rate);
+            $obtainedMark = ($rightCount * $markForRightAnswere) - ($wrongCount * $exam->negative_mark_rate);
         } else {
-            $obtainedMark = ($rightCount * 2);
+            $obtainedMark = ($rightCount * $markForRightAnswere);
         }
 
         return [
@@ -166,4 +159,10 @@ class UserExamController extends Controller
         ];
     }
 
+    public function result( $id ) {
+        $userExam = UserExam::where(['exam_id' => $id, 'user_id' => Auth::user()->id])->first();
+        $exam = Exam::find( $id );
+
+        return $this->getResultPage( $userExam, $exam );
+    }
 }

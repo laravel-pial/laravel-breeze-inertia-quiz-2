@@ -45,7 +45,6 @@ class ExamController extends Controller
             'title' => 'required|string',
             'duration' => 'required|numeric',
             'mark' => 'required|numeric',
-            'has_negative_marking' => 'required|boolean',
             'negative_mark_rate' => 'required|numeric',
             'no_of_quizes' => 'required|numeric',
         ]);
@@ -135,6 +134,12 @@ class ExamController extends Controller
      * Returns View to Add quiz to this exam
      */
     public function addQuiz( $id ) {
+        // If all the quizes for the exam added already then redirect to exam list page
+        $exam = Exam::find( $id );
+        if( $exam->quizes->count() >= $exam->no_of_quizes ) {
+            return redirect('exams');
+        }
+
         return Inertia::render('Quiz/Create', [
             'exam' => Exam::find( $id )
         ]);

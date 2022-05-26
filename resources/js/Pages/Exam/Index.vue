@@ -13,7 +13,7 @@ import { Head } from '@inertiajs/inertia-vue3';
 <AuthenticatedLayout>
     <Head title="Exam List" /> 
     <div class="container flex flex-row justify-center">
-        <div id="exam-index" class="w-1/2 flex flex-col">
+        <div id="exam-index" class="w-full px-5 flex flex-col">
     
             <h5>Exam List</h5>
             <SingleExamCard 

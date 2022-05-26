@@ -1,13 +1,13 @@
 <template>
     <AuthenticatedLayout>
-        <div class="container">
-            <div class="timer">
-                Exam: {{ exam.title }}
-                Timer: {{ countDown.hours }}:{{ countDown.minutes }}:{{ countDown.seconds }}
+        <div class="container p-4 w-full flex flex-col justify-center">
+            <div class="header mb-4 flex flex-row justify-between text-3xl font-bold text-green-900">
+                <span>Exam: {{ exam.title }}</span>
+                <span>Time Left: {{ countDown.hours.toString().padStart(2, '0') }}:{{ countDown.minutes.toString().padStart(2, '0') }}:{{ countDown.seconds.toString().padStart(2, '0') }}</span>
             </div>
             <div class="single-quiz">
                 <div class="row1">
-                    <p class="title">
+                    <p class="title text-2xl font-bold text-gray-800 mb-2">
                         {{ quiz.title }}
                     </p>
                 </div>
@@ -15,25 +15,25 @@
                     v-if="quiz.type && quiz.type.includes('mcq')"
                 >
                     <div class="row2">
-                        <label for="option_a">A. </label>
                         <input type="radio" id="option_a"
-                            v-model="form.checked_value"
+                            v-model="form.checked_value" class="mr-2"
                             value="option_a"
                         >
+                        <label for="option_a">{{ quiz.option_a }} </label>
                     </div>
                     <div class="row2">
-                        <label for="option_b">B. </label>
                         <input type="radio" id="option_b"
-                            v-model="form.checked_value"
+                            v-model="form.checked_value" class="mr-2"
                             value="option_b"
                         >
+                        <label for="option_b">{{ quiz.option_b }}</label>
                     </div>
                     <div class="row2">
-                        <label for="option_c">C. </label>
                         <input type="radio" id="option_c"
-                            v-model="form.checked_value"
+                            v-model="form.checked_value" class="mr-2"
                             value="option_c"
                         >
+                        <label for="option_c">{{ quiz.option_c }}</label>
                     </div>
                 </template>
                 <div class="answere"
@@ -41,11 +41,11 @@
                 >
                     <label for="">Answere: </label>
                     <input type="text" name="answere" id=""
-                        v-model="form.answere"
+                        v-model.trim="form.answere"
                     >
                 </div>
 
-                <button type="submit" class="p-1 shadow rounded bg-blue-800 text-white"
+                <button type="submit" class="p-2 mt-3 shadow rounded bg-blue-800 text-white"
                     @click.prevent="submit"
                 >
                     Submit
@@ -101,6 +101,7 @@ const countDownFn = () => {
 
     if( remainingTime <= 0 ) {
         clearInterval( interval );
+        form.get(`/exams/${ props.exam.id }/result`);
         return;
     }
 

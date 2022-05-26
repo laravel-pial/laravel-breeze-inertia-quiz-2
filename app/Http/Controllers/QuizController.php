@@ -31,7 +31,9 @@ class QuizController extends Controller
     {
         //
         return Inertia::render('Quiz/Create', [
-            'exams' => Exam::all()
+            'exams' => Exam::all()->filter(
+                fn ( $exam ) => $exam->quizes->count() < $exam->no_of_quizes 
+            )
         ]);
     }
 
@@ -47,9 +49,9 @@ class QuizController extends Controller
         $request->validate([
             'title' => 'required|string',
             'type' => 'required|string|in:mcq,blank',
-            'option_a' => 'required|string',
-            'option_b' => 'required|string',
-            'option_c' => 'required|string',
+            'option_a' => 'exclude_if:type,blank|required|string',
+            'option_b' => 'exclude_if:type,blank|required|string',
+            'option_c' => 'exclude_if:type,blank|required|string',
             'answere' => 'required|string',
 
             'exam_id' => 'string'
@@ -66,7 +68,15 @@ class QuizController extends Controller
             'exam_id' => $request->exam_id
         ]);
 
-        return redirect('quizes');
+        $exam = Exam::find( $request-> exam_id );
+
+        if( $exam->quizes->count() < $exam->no_of_quizes ) {
+            return Inertia::render('Quiz/Create', [
+                'exam' => Exam::find( $request->exam_id )
+            ]);
+        } else {
+            return redirect('exams');
+        }
     }
 
     /**

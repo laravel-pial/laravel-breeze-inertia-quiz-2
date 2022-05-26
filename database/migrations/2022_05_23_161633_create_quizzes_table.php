@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(Exam::class);
             $table->string('title')->nullable(false);
             $table->enum('type', ['mcq', 'blank' ])->nullable(false);
-            $table->string('option_a');
-            $table->string('option_b');
-            $table->string('option_c');
+            $table->string('option_a')->nullable();
+            $table->string('option_b')->nullable();
+            $table->string('option_c')->nullable();
             $table->string('answere')->nullable(false);
             $table->timestamps();
         });

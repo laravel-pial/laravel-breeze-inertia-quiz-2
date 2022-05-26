@@ -45,7 +45,7 @@ const submit = () => {
     
                 <div>
                     <BreezeLabel for="has_negative_marking" value="has_negative_marking" />
-                    <BreezeInput id="has_negative_marking" type="checkbox" class="mt-1 block" v-model="form.has_negative_marking" autocomplete="has_negative_marking" />
+                    <input id="has_negative_marking" type="checkbox" class="mt-1 block" v-model="form.has_negative_marking" autocomplete="has_negative_marking" />
                 </div>
     
                 <div
