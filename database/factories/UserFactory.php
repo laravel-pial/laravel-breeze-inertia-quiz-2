@@ -28,7 +28,7 @@ class UserFactory extends Factory
         return [
             'name' => 'brad',
             'email' => 'brad@gmail.com',
-            'phone' => '01700000000',
+            'phone' => '01712345678',
             'email_verified_at' => now(),
             'password' => '$2y$10$.MuCNDR8Kx7ZTbDJCEZBxuvYn8XG9dugo7eEkwN3KZH9aJmM707AS', // password
         ];
