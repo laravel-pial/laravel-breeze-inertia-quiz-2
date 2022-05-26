@@ -23440,7 +23440,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
     "class": "bg-pink-600 text-white",
     href: "/exams/".concat($props.id, "/attend"),
-    method: "POST",
+    method: "GET",
     as: "button"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -25704,38 +25704,47 @@ var _hoisted_2 = {
 };
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
-  "class": "w-full text-center font-mono text-xl"
-}, "!Exam Finished", -1
+  "class": "w-full text-center font-mono text-5xl"
+}, "Exam Finished", -1
 /* HOISTED */
 );
 
 var _hoisted_4 = {
-  "class": "section-2 w-full flex justify-between"
+  "class": "w-full text-center font-mono text-4xl my-2"
 };
-var _hoisted_5 = {
-  "class": "unanswered bg-yellow-700 text-white text-center flex-grow"
-};
+
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Your obtained mark: ");
+
 var _hoisted_6 = {
-  "class": "answered bg-blue-700 text-white text-center flex-grow"
+  "class": "text-green-800 font-bold"
 };
 var _hoisted_7 = {
-  "class": "right bg-green-700 text-white text-center flex-grow"
+  "class": "section-2 w-full flex justify-between"
 };
 var _hoisted_8 = {
+  "class": "unanswered bg-yellow-700 text-white text-center flex-grow"
+};
+var _hoisted_9 = {
+  "class": "answered bg-blue-700 text-white text-center flex-grow"
+};
+var _hoisted_10 = {
+  "class": "right bg-green-700 text-white text-center flex-grow"
+};
+var _hoisted_11 = {
   "class": "wrong bg-red-800 text-white text-center flex-grow"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["AuthenticatedLayout"], null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Your obtained mark: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.obtained_mark), 1
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.obtained_mark), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_5, " Unanswered: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.unanswered), 1
+      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, " Unanswered: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.unanswered), 1
       /* TEXT */
-      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, " Answered: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.answered), 1
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_9, " Answered: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.answered), 1
       /* TEXT */
-      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, " Right: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.right), 1
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_10, " Right: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.right), 1
       /* TEXT */
-      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, " Wrong: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.wrong), 1
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_11, " Wrong: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.result.wrong), 1
       /* TEXT */
       )])])];
     }),

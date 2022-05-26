@@ -5,8 +5,10 @@
             <h2
                 class="w-full flex flex-col justify-start items-center"
             > 
-                <h2 class="w-full text-center font-mono text-xl" >!Exam Finished</h2>
-                <span>Your obtained mark: {{ result.obtained_mark }}</span>
+                <h2 class="w-full text-center font-mono text-5xl" >Exam Finished</h2>
+                <p class="w-full text-center font-mono text-4xl my-2">
+                    Your obtained mark: <span class="text-green-800 font-bold">{{ result.obtained_mark }}</span>
+                </p>
             </h2>
 
             <div class="section-2 w-full flex justify-between">

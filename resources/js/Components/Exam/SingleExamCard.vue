@@ -7,7 +7,7 @@
             <div class="btn-group w-1/4 p-1 flex flex-row justify-between">
                 <Link class="bg-pink-600 text-white" 
                     :href="`/exams/${ id }/attend`" 
-                    method="POST" 
+                    method="GET" 
                     as="button"
                 >
                     Attend
