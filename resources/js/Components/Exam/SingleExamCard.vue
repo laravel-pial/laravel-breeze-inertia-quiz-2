@@ -5,21 +5,21 @@
         <div class="p-2 row1 w-full flex flex-row justify-between bg-green-900">
             <h5 class="p-1 text-white font-bold text-2xl" >{{ title }}</h5>
             <div class="btn-group w-1/4 p-1 flex flex-row justify-between">
-                <Link class="bg-pink-600 text-white p-2 rounded" 
+                <Link class="bg-pink-800 text-white p-2 rounded hover:bg-pink-900" 
                     :href="`/exams/${ id }/attend`" 
                     method="GET" 
                     as="button"
                 >
                     Attend
                 </Link>
-                <Link class="bg-blue-600 text-white p-2 rounded mx-1" 
+                <Link class="bg-blue-800 text-white p-2 rounded mx-1 hover:bg-blue-900" 
                     :href="`/exams/${ id }/edit`" 
                     method="GET" 
                     as="button"
                 >
                     Edit
                 </Link>
-                <Link class="bg-red-600 text-white p-2 rounded"
+                <Link class="bg-red-800 text-white p-2 rounded hover:bg-red-900"
                     :href="`/exams/${ id }`" 
                     method="DELETE"
                     as="button" 
@@ -39,7 +39,7 @@
         <div class="p-2 row3 w-full flex flex-row justify-between">
             <p>Quizes: {{ no_of_quizes }} </p>
             <Link :href="`/exams/${ id }/quizes/create`" method="GET" as="button" 
-                class="p-2 bg-blue-800 text-white rounded"
+                class="p-2 bg-blue-800 text-white rounded hover:bg-blue-900"
             >
                 Add Quiz
             </Link>
