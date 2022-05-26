@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\UserExamController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +19,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+// ================== EXAM Routes
+
+    
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resources([
+        'exams' => ExamController::class,
+        'quizes' => QuizController::class,
+    ]);
+});
+
+// Exam Custom Routes
+Route::get('/exams/{id}/quizes/create', [ExamController::class, 'addQuiz']);
+
+// User exam routes
+Route::get('/exams/{id}/attend', [UserExamController::class, 'attend' ]);
+Route::post('/exams/{examId}/quizes/{quizId}', [UserExamController::class, 'nextQuiz' ]);
+Route::get('/exams/{id}/result', [UserExamController::class, 'result'])->name('userExam.result');
