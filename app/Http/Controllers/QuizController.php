@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,7 +30,9 @@ class QuizController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Quiz/Create');
+        return Inertia::render('Quiz/Create', [
+            'exams' => Exam::all()
+        ]);
     }
 
     /**
@@ -49,7 +52,7 @@ class QuizController extends Controller
             'option_c' => 'required|string',
             'answere' => 'required|string',
 
-            'examId' => 'string'
+            'exam_id' => 'string'
         ]);
 
         Quiz::create([
@@ -60,7 +63,7 @@ class QuizController extends Controller
             'option_c' => $request->option_c,
             'answere' => $request->answere,
 
-            'exam_id' => $request->examId
+            'exam_id' => $request->exam_id
         ]);
 
         return redirect('quizes');

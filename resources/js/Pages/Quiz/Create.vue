@@ -5,9 +5,13 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import BreezeButton from '@/Components/Button.vue';
+import { ref } from '@vue/reactivity';
 const props = defineProps([
-    'exam'
+    'exam',
+    'exams'
 ]);
+
+const selectedExamId = ref('');
 
 const form = useForm({
     'title': 'Quiz 1',
@@ -16,8 +20,9 @@ const form = useForm({
     'option_b': 'delhi',
     'option_c': 'beijing',
     'answere': 'dhaka',
-    'examId': props.exam.id
+    'exam_id': props.exam && props.exam.id.toString() || selectedExamId
 });
+
 
 const submit = () => {
     form.post( route('quizes.store') );
@@ -37,6 +42,24 @@ const submit = () => {
             <BreezeValidationErrors class="mb-4" />
         
             <form @submit.prevent="submit">
+                <div
+                    v-if="exams"
+                >
+                    <BreezeLabel for="exams" value="Exam" />
+                    <select class="w-full"
+                        v-model="selectedExamId"
+                    >
+                        <option value="">Select an Exam</option>
+                        <option
+                            v-for="( ex, index ) in exams"
+                            :key="index"
+                            :value="ex.id.toString()"
+                        > 
+                            {{ ex.title }} 
+                        </option>
+                    </select>
+                </div>
+                
                 <div>
                     <BreezeLabel for="title" value="Title" />
                     <BreezeInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" required autofocus autocomplete="title" />
